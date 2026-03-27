@@ -23,6 +23,12 @@ repositories {
 	mavenCentral()
 }
 
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.boot:spring-boot-dependencies:3.5.13"
+	}
+}
+
 dependencies {
 	api 'org.springframework.boot:spring-boot-starter-data-jpa'
 
