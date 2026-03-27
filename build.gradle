@@ -1,6 +1,6 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.13'
+	id 'java-library'
+	id 'maven-publish'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -23,27 +23,31 @@ repositories {
 	mavenCentral()
 }
 
-ext {
-	set('springCloudVersion', "2025.0.1")
-}
-
 dependencies {
-//	DB 연결 후 사용
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	eureka server 등록할 때 사용 권장
-//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	api 'org.springframework.boot:spring-boot-starter-data-jpa'
+
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+publishing {
+	publications {
+		gpr(MavenPublication) {
+			from components.java
+			artifactId = 'common'
+		}
+	}
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = uri("https://maven.pkg.github.com/FiveHandSixHand/common-service")
+			credentials {
+				username = System.getenv("GPR_USER")
+				password = System.getenv("GPR_TOKEN")
+			}
+		}
 	}
 }
 
