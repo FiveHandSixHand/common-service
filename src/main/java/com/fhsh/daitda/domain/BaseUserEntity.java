@@ -21,7 +21,7 @@ public abstract class BaseUserEntity extends BaseEntity {
 
     @LastModifiedBy
     @Column(length=45)
-    protected String modifiedBy;
+    protected String updatedBy;
 
     @Column(length=45)
     protected String deletedBy;
