@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
 
     //403: 권한없음
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgument(AccessDeniedException e) {
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException e) {
         log.error("AccessDeniedException is occurred.", e);
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
