@@ -32,13 +32,11 @@ public abstract class BaseUserEntity extends BaseEntity {
     // Soft Delete 구현
     protected void delete(String deletedBy) {
         // 중복 삭제로 인해 삭제 관련 필드가 업데이트되는 상황을 방지
-        if (this.deletedAt != null) {
+        if (isDeleted()) {
             return;
         }
 
-        if (deletedBy != null && deletedBy.length() > AUDITOR_MAX_LENGTH) {
-            throw new IllegalArgumentException("삭제자 정보는 %d자를 초과할 수 없습니다.".formatted(AUDITOR_MAX_LENGTH));
-        }
+        validateAuditorLength(deletedBy);
 
         // 삭제자가 없으면 SYSTEM 삭제로 간주
         this.updatedBy = StringUtils.hasText(deletedBy) ? deletedBy : "SYSTEM";
@@ -46,5 +44,29 @@ public abstract class BaseUserEntity extends BaseEntity {
 
         this.updatedAt = LocalDateTime.now();
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public boolean isDeleted() {
+        return this.deletedAt != null;
+    }
+
+    public void restore(String restoredBy) {
+        if (!isDeleted()) {
+            return;
+        }
+
+        validateAuditorLength(restoredBy);
+
+        this.updatedBy = StringUtils.hasText(restoredBy) ? restoredBy : "SYSTEM";
+        this.deletedBy = null;
+
+        this.updatedAt = LocalDateTime.now();
+        this.deletedAt = null;
+    }
+
+    private void validateAuditorLength(String auditor) {
+        if (auditor != null && auditor.length() > AUDITOR_MAX_LENGTH) {
+            throw new IllegalArgumentException("auditor 정보는 %d자를 초과할 수 없습니다.".formatted(AUDITOR_MAX_LENGTH));
+        }
     }
 }
