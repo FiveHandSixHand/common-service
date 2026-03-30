@@ -1,6 +1,5 @@
 package com.fhsh.daitda.domain;
 
-import jakarta.persistence.Access;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
