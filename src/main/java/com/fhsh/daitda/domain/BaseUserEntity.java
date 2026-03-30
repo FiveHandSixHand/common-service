@@ -41,8 +41,10 @@ public abstract class BaseUserEntity extends BaseEntity {
         }
 
         // 삭제자가 없으면 SYSTEM 삭제로 간주
+        this.updatedBy = StringUtils.hasText(deletedBy) ? deletedBy : "SYSTEM";
         this.deletedBy = StringUtils.hasText(deletedBy) ? deletedBy : "SYSTEM";
 
+        this.updatedAt = LocalDateTime.now();
         this.deletedAt = LocalDateTime.now();
     }
 }
