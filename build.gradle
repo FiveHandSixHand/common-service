@@ -38,11 +38,25 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+def env = [:]
+def envFile = rootProject.file(".env")
+
+if (envFile.exists()) {
+	envFile.eachLine { line ->
+		if (line && !line.startsWith("#") && line.contains("=")) {
+			def (key, value) = line.split("=", 2)
+			env[key.trim()] = value.trim()
+		}
+	}
+}
+
 publishing {
 	publications {
 		gpr(MavenPublication) {
 			from components.java
+			groupId = 'com.fhsh.daitda'
 			artifactId = 'common'
+			version = '0.0.1'
 		}
 	}
 	repositories {
@@ -50,8 +64,8 @@ publishing {
 			name = "GitHubPackages"
 			url = uri("https://maven.pkg.github.com/FiveHandSixHand/common-service")
 			credentials {
-				username = System.getenv("GPR_USER")
-				password = System.getenv("GPR_TOKEN")
+				username = env["GITHUB_USERNAME"]
+				password = env["GITHUB_TOKEN"]
 			}
 		}
 	}
@@ -59,4 +73,12 @@ publishing {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(GenerateModuleMetadata).configureEach {
+	suppressedValidationErrors.add('dependencies-without-versions')
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
 }
