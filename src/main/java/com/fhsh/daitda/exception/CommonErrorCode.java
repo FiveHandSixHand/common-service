@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum CommonErrorCode {
+public enum CommonErrorCode implements ErrorCode{
     // 인증/인가(Global목적 - 추후 불필요하면 삭제)
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증이 필요합니다"),
     FORBIDDEN(HttpStatus.FORBIDDEN, "권한이 없습니다"),
