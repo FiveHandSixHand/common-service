@@ -26,7 +26,7 @@ public abstract class BaseUserEntity extends BaseEntity {
     protected UUID deletedBy;
 
     // Soft Delete 구현
-    protected void delete(UUID deletedBy) {
+    public void delete(UUID deletedBy) {
         // 중복 삭제로 인해 삭제 관련 필드가 업데이트되는 상황을 방지
         if (isDeleted()) {
             return;
