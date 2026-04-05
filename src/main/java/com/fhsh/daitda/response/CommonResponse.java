@@ -28,4 +28,14 @@ public class CommonResponse<T> {
     public static CommonResponse<Void> success() {
         return new CommonResponse<>(200, "요청이 성공적으로 처리되었습니다.", null);
     }
+
+    // 실패 - 기본
+    public static CommonResponse<Void> fail(int status, String message) {
+        return new CommonResponse<>(status, message, null);
+    }
+
+    // 실패 - data 포함
+    public static <T> CommonResponse<T> fail(int status, String message, T data) {
+        return new CommonResponse<>(status, message, data);
+    }
 }
